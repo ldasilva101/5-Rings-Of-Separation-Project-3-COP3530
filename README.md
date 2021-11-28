@@ -1,3 +1,18 @@
 # Project3COP3530
 
-This is our final group project for COP3530. Group members are Hadley Browder, Nicole Campbell, and Lucas Da Silva.
+Administrative
+
+Team Name: The Gold Medalists
+Team Members: Hadley Browder, Nicole Campbell, Lucas Da Silva
+Project Title: Five Rings of Separation 
+GitHub URL: *tbd*
+Video Link:
+
+Extended and Refined Proposal
+
+Analysis
+
+Reflection
+
+References
+
