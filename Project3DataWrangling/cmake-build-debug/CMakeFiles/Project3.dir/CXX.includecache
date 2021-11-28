@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/hadleybrowder/Desktop/COP3530/Project3/datachanging.cpp
+iostream
+-
+string
+-
+vector
+-
+fstream
+-
+sstream
+-
+
