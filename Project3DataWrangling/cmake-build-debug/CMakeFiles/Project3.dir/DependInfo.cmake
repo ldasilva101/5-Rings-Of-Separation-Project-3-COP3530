@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/hadleybrowder/Desktop/COP3530/Project3/datachanging.cpp" "/Users/hadleybrowder/Desktop/COP3530/Project3/cmake-build-debug/CMakeFiles/Project3.dir/datachanging.cpp.o"
+  "/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.cpp" "/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles/Project3.dir/athlete.cpp.o"
+  "/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp" "/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles/Project3.dir/datachanging.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

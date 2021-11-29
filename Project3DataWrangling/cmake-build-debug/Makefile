@@ -57,10 +57,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/hadleybrowder/Desktop/COP3530/Project3
+CMAKE_SOURCE_DIR = /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/hadleybrowder/Desktop/COP3530/Project3/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hadleybrowder/Desktop/COP3530/Project3/cmake-build-debug/CMakeFiles /Users/hadleybrowder/Desktop/COP3530/Project3/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hadleybrowder/Desktop/COP3530/Project3/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,6 +129,30 @@ Project3/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/build
 .PHONY : Project3/fast
 
+athlete.o: athlete.cpp.o
+.PHONY : athlete.o
+
+# target to build an object file
+athlete.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/athlete.cpp.o
+.PHONY : athlete.cpp.o
+
+athlete.i: athlete.cpp.i
+.PHONY : athlete.i
+
+# target to preprocess a source file
+athlete.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/athlete.cpp.i
+.PHONY : athlete.cpp.i
+
+athlete.s: athlete.cpp.s
+.PHONY : athlete.s
+
+# target to generate assembly for a file
+athlete.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/athlete.cpp.s
+.PHONY : athlete.cpp.s
+
 datachanging.o: datachanging.cpp.o
 .PHONY : datachanging.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Project3"
+	@echo "... athlete.o"
+	@echo "... athlete.i"
+	@echo "... athlete.s"
 	@echo "... datachanging.o"
 	@echo "... datachanging.i"
 	@echo "... datachanging.s"

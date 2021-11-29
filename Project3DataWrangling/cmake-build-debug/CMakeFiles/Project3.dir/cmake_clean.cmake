@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Project3.dir/athlete.cpp.o"
   "CMakeFiles/Project3.dir/datachanging.cpp.o"
   "Project3"
   "Project3.pdb"

@@ -6,7 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/hadleybrowder/Desktop/COP3530/Project3/datachanging.cpp
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.h
+string
+-
+utility
+-
+iostream
+-
+vector
+-
+
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp
 iostream
 -
 string
@@ -17,4 +27,6 @@ fstream
 -
 sstream
 -
+athlete.h
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.h
 
