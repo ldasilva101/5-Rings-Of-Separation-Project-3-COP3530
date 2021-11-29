@@ -6,9 +6,34 @@
 #include "athlete.h"
 using namespace std;
 
-int main() {
-    vector<string> athleteNames;
-    ifstream inFile("olympicdata.csv");
+void addAthlete(string name, string team, string sport, string event, string medal, vector<athlete> &athletes){
+    bool duplicate = false;
+    vector<pair<string, string>> events;
+    for(int i = 0; i < athletes.size(); i++){
+        cout << "what's up" << endl;
+        if(athletes[i].name == name && athletes[i].olympicTeam == team && athletes[i].sport == sport){
+            athletes[i].events.emplace_back(event, medal);
+            if(!medal.empty()){
+                athletes[i].medalCount++;
+            }
+            duplicate = true;
+            break;
+        }
+    }
+
+    if(!duplicate){
+        events.emplace_back(event, medal);
+        int medalCount = 0;
+        if(!medal.empty()){
+            medalCount++;
+        }
+        athletes.emplace_back(name, team, sport, medalCount, events);
+    }
+
+}
+
+void readCSV(string filename, vector<athlete> &athletes){
+    ifstream inFile(filename);
 
     if(!inFile.is_open())
     {
@@ -41,13 +66,17 @@ int main() {
             sport = sport.substr(1, sport.size() - 2);
             event = event.substr(1, event.size() - 2);
             medal = medal.substr(1, medal.size() - 2);
-            athleteNames.push_back(event);
-        }
-    }
 
-    for(int i = 0; i < athleteNames.size(); i++)
-    {
-        cout << athleteNames[i] << endl;
+            addAthlete(name, team, sport, event, medal, athletes);
+        }
     }
 }
 
+int main() {
+    vector<athlete> athletes;
+    readCSV("olympicdata.csv", athletes);
+    for(int i = 0; i < athletes.size(); i++){
+        cout << athletes[i].name << endl;
+        cout << athletes[i].medalCount << endl;
+    }
+}
