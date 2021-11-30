@@ -10,6 +10,6 @@ struct athlete {
     string olympicTeam;
     string sport;
     int medalCount;
-    vector<pair<string, string>> events;
-    athlete(string _name, string _olympicTeam, string _sport, int _medalCount, vector<pair<string, string>> _events);
+    vector<string> events;
+    athlete(string _name, string _olympicTeam, string _sport, int _medalCount, vector<string> _events);
 };
