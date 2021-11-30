@@ -7,18 +7,21 @@
 #include "athlete.h"
 using namespace std;
 
-class Graph{
+class Graph
+{
 public:
     vector<pair<int, int>> *adj_list;
     int vertices;
-    Graph(int n){
+    Graph(int n)
+    {
         vertices = n;
         adj_list = new vector<pair<int, int>>[n];
     }
     void addEdge(int athleteA, int athleteB, int medCount);
 };
 
-void Graph::addEdge(int athleteA, int athleteB, int medCount){
+void Graph::addEdge(int athleteA, int athleteB, int medCount)
+{
     adj_list[athleteA].emplace_back(athleteB, medCount);
     adj_list[athleteB].emplace_back(athleteA, medCount);
 }
@@ -27,7 +30,8 @@ void Graph::addEdge(int athleteA, int athleteB, int medCount){
 void addAthlete(string name, string team, string sport, string event, string medal, vector<athlete> &athletes){
     bool duplicate = false;
     vector<pair<string, string>> events;
-    for(int i = 0; i < athletes.size(); i++){
+    for(int i = 0; i < athletes.size(); i++)
+    {
         if(athletes[i].name == name && athletes[i].olympicTeam == team && athletes[i].sport == sport){
             athletes[i].events.emplace_back(event, medal);
             if(!medal.empty()){
@@ -37,7 +41,8 @@ void addAthlete(string name, string team, string sport, string event, string med
         }
     }
 
-    if(!duplicate){
+    if(!duplicate)
+    {
         events.emplace_back(event, medal);
         int medalCount = 0;
         if(!medal.empty()){
@@ -48,19 +53,20 @@ void addAthlete(string name, string team, string sport, string event, string med
 
 }
 
-void readCSV(string filename, vector<athlete> &athletes){
+void readCSV(string filename, vector<athlete> &athletes)
+{
     ifstream inFile(filename);
 
     if(!inFile.is_open())
-    {
         cout << "Error: could not open file." << endl;
-    }
+
     if(inFile.is_open())
     {
         string fileLine;
         getline(inFile, fileLine);
 
-        while (getline(inFile, fileLine)) {
+        while (getline(inFile, fileLine))
+        {
             istringstream stream(fileLine);
 
             string row;
@@ -88,21 +94,24 @@ void readCSV(string filename, vector<athlete> &athletes){
     }
 }
 
-int main() {
+int main()
+{
     vector<athlete> athletes;
     readCSV("olympicdata.csv", athletes);
-    for(int i = 0; i < athletes.size(); i++){
+    for(int i = 0; i < athletes.size(); i++)
+    {
         cout << athletes[i].name << endl;
         cout << athletes[i].medalCount << endl;
     }
 
     auto *olympicGraph = new Graph(athletes.size());
 
-    for(int i = 0; i < athletes.size(); i++){
-        for(int j = 0; j < athletes.size(); j++){
-            if(i != j && (athletes[i].olympicTeam == athletes[j].olympicTeam || athletes[i].sport == athletes[j].sport)){
+    for(int i = 0; i < athletes.size(); i++)
+    {
+        for(int j = 0; j < athletes.size(); j++)
+        {
+            if(i != j && (athletes[i].olympicTeam == athletes[j].olympicTeam || athletes[i].sport == athletes[j].sport))
                 olympicGraph->addEdge(i, j, athletes[i].medalCount + athletes[j].medalCount);
-            }
         }
     }
 }
