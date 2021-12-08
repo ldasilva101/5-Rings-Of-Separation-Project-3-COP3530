@@ -11,6 +11,7 @@ struct athlete {
     string olympicTeam;
     string sport;
     int medalCount;
+    double weight;
     vector<string> events;
     athlete(int _index, string _name, string _olympicTeam, string _sport, int _medalCount, vector<string> _events);
 };

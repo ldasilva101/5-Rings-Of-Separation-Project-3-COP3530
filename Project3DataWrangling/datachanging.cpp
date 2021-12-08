@@ -12,19 +12,25 @@ using namespace std;
 class Graph
 {
 public:
-    vector<vector<pair<int, int>>> adj_list;
+    vector<vector<pair<int, double>>> adj_list;
     int vertices;
     Graph(int n)
     {
         vertices = n;
     }
-    void addEdge(int athleteA, int athleteB, int medCount);
+    void addEdge(int athleteA, int athleteB, int medalCount);
 };
 
-void Graph::addEdge(int athleteA, int athleteB, int medCount)
+void Graph::addEdge(int athleteA, int athleteB, int medalCount)
 {
-    adj_list[athleteA].push_back(make_pair(athleteA, athleteB));
-    adj_list[athleteB].push_back(make_pair(athleteA, athleteB));
+    double weight;
+    if(medalCount == 0)
+        weight = 2.0;
+    else
+        weight = 1.0 / medalCount;
+
+    adj_list[athleteA].push_back(make_pair(athleteB, weight));
+    adj_list[athleteB].push_back(make_pair(athleteA, weight));
 }
 
 void printBasicInfo(int athleteID, vector<athlete> &athletes)
@@ -115,12 +121,12 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
     if(!inFile.is_open())
         cout << "Error: could not open file." << endl;
 
+    int i = 0;
     if(inFile.is_open())
     {
         string fileLine;
         getline(inFile, fileLine);
 
-        int i = 0;
         while (getline(inFile, fileLine))
         {
             istringstream stream(fileLine);
@@ -137,6 +143,7 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
 
             cout << i << endl;
             i++;
+
             if(athleteAstr != "NA")
             {
                 int athleteA = stoi(athleteAstr);
@@ -168,7 +175,7 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
     }
 }*/
 
-vector<int> dijkstra(const Graph& graph, int src)
+/*vector<int> dijkstra(const Graph& graph, int src)
 {
     vector<int> distance(graph.vertices);
     bool visited[graph.vertices];
@@ -201,7 +208,179 @@ vector<int> dijkstra(const Graph& graph, int src)
         }
     }
     return distance;
+}*/
+
+/*void dijkstra(const Graph& graph, int *dist, int *prev, int start)
+{
+    int n = graph.vertices;
+
+    for(int u = 0; u<n; u++) {
+        dist[u] = 9999;   //set as infinity
+        prev[u] = -1;    //undefined previous
+    }
+
+    dist[start] = 0;   //distance of start is 0
+    set<int> S;       //create empty set S
+    list<int> Q;
+
+    for(int u = 0; u<n; u++) {
+        Q.push_back(u);    //add each node into queue
+    }
+
+    while(!Q.empty()) {
+        list<int> :: iterator i;
+        i = min_element(Q.begin(), Q.end());
+        int u = *i; //the minimum element from queue
+        Q.remove(u);
+        S.insert(u); //add u in the set
+        for(int k = 0; k < graph.adj_list[u].size(); k++) {
+            pair<int, int> it = graph.adj_list[u][k];
+            if((dist[u]+(it.second)) < dist[it.first]) { //relax (u,v)
+                dist[it.second] = (dist[u]+(it.first));
+                prev[it.first] = u;
+            }
+        }
+    }
+}*/
+
+int minDistance(int dist[], bool sptSet[], int V)
+{
+
+    // Initialize min value
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++)
+        if (sptSet[v] == false &&
+            dist[v] <= min)
+            min = dist[v], min_index = v;
+
+    return min_index;
 }
+
+void printPath(int parent[], int j)
+{
+
+    // Base Case : If j is source
+    if (parent[j] == - 1)
+        return;
+
+    printPath(parent, parent[j]);
+
+    printf("%d ", j);
+}
+
+void printSolution(int dist[], int n,
+                   int parent[], int dest)
+{
+    int src = 0;
+    printf("Vertex\t Distance\tPath");
+    printf("\n%d -> %d \t\t %d\t\t%d ",
+           src, dest, dist[dest], src);
+    printPath(parent, dest);
+}
+
+// Function that implements Dijkstra's
+// single source shortest path
+// algorithm for a graph represented
+// using adjacency matrix representation
+void dijkstra(const Graph& graph, int src, int dest)
+{
+
+    // The output array. dist[i]
+    // will hold the shortest
+    // distance from src to i
+    int dist[graph.vertices];
+
+    // sptSet[i] will true if vertex
+    // i is included / in shortest
+    // path tree or shortest distance
+    // from src to i is finalized
+    bool sptSet[graph.vertices];
+
+    // Parent array to store
+    // shortest path tree
+    int parent[graph.vertices];
+
+    // Initialize all distances as
+    // INFINITE and stpSet[] as false
+    for (int i = 0; i < graph.vertices; i++)
+    {
+        parent[0] = -1;
+        dist[i] = INT_MAX;
+        sptSet[i] = false;
+    }
+
+    // Distance of source vertex
+    // from itself is always 0
+    dist[src] = 0;
+
+    // Find shortest path
+    // for all vertices
+    for (int count = 0; count < graph.vertices - 1; count++)
+    {
+        // Pick the minimum distance
+        // vertex from the set of
+        // vertices not yet processed.
+        // u is always equal to src
+        // in first iteration.
+        int u = minDistance(dist, sptSet, graph.vertices);
+
+        // Mark the picked vertex
+        // as processed
+        sptSet[u] = true;
+
+        // Update dist value of the
+        // adjacent vertices of the
+        // picked vertex.
+        for (int v = 0; v < graph.vertices; v++)
+
+            // Update dist[v] only if is
+            // not in sptSet, there is
+            // an edge from u to v, and
+            // total weight of path from
+            // src to v through u is smaller
+            // than current value of
+            // dist[v]
+            if (!sptSet[v] && graph.adj_list[u][v].second && dist[u] + graph.adj_list[u][v].second < dist[v])
+            {
+                parent[v] = u;
+                dist[v] = dist[u] + graph.adj_list[u][v].second;
+            }
+    }
+
+    // print the constructed
+    // distance array
+    printSolution(dist, graph.vertices, parent, dest);
+}
+
+// not totally correct :)
+/*void bfs(const Graph& graph, int src) {
+    set<int> visited;
+    queue<int> search;
+
+    visited.insert(src);
+    search.push(src);
+
+    while(!search.empty())
+    {
+        int element = search.front();
+        cout << element << " ";
+        search.pop();
+
+        vector<int> connections = graph.adj_list[element];
+        sort(connections.begin(), connections.begin() + connections.size());
+
+        for(int i = 0; i < connections.size(); i++)
+        {
+            if(visited.count(connections[i]) == 0)
+            {
+                visited.insert(connections[i]);
+                search.push(connections[i]);
+            }
+        }
+    }
+}*/
+
 
 int main()
 {
@@ -238,6 +417,11 @@ int main()
         makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);*/
 
         // dijkstra's
+        //int dist[olympicGraph->vertices], prev[olympicGraph->vertices];
+        int start = stoi(athlete1);
+        int end = stoi(athlete2);
+        dijkstra(*olympicGraph, start, end);
+
         // bellman ford
         // bfs or something
         // print basic info in these
