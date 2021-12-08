@@ -5,26 +5,26 @@
 #include <sstream>
 #include <map>
 #include <set>
+#include <queue>
 #include "athlete.h"
 using namespace std;
 
 class Graph
 {
 public:
-    vector<pair<int, int>> *adj_list;
+    vector<vector<pair<int, int>>> adj_list;
     int vertices;
     Graph(int n)
     {
         vertices = n;
-        adj_list = new vector<pair<int, int>>[n];
     }
     void addEdge(int athleteA, int athleteB, int medCount);
 };
 
 void Graph::addEdge(int athleteA, int athleteB, int medCount)
 {
-    adj_list[athleteA].emplace_back(athleteB, medCount);
-    adj_list[athleteB].emplace_back(athleteA, medCount);
+    adj_list[athleteA].push_back(make_pair(athleteA, athleteB));
+    adj_list[athleteB].push_back(make_pair(athleteA, athleteB));
 }
 
 void printBasicInfo(int athleteID, vector<athlete> &athletes)
@@ -148,26 +148,59 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
     }
 }
 
-void makeGraphPairs(map<int, set<int>> &checked, int athlete1, int &athlete2, vector<pair<int, int>> &pairs, vector<athlete> &athletes)
+/*void makeGraphPairs(map<int, bool> &checked, int athlete1, int &athlete2, vector<pair<int, int>> &pairs, vector<athlete> &athletes)
 {
+    checked[athlete1] = true;
+
     for(int i = 0; i < athletes.size(); i++)
     {
-        bool exists = false;
-        if(checked[athlete1].find(i) != checked[athlete1].end())
-            exists = true;
-        if(i != athlete1  && !exists && (athletes[i].olympicTeam == athletes[athlete1].olympicTeam || athletes[i].sport == athletes[athlete1].sport))
+        if(i != athlete1 && (athletes[i].olympicTeam == athletes[athlete1].olympicTeam || athletes[i].sport == athletes[athlete1].sport))
         {
-            // checked.insert();
             pairs.push_back(make_pair(athlete1, i));
             if(i == athlete2)
             {
-                cout << i;
+                cout << "goal reached" << endl;
                 break;
             }
-            else
+            else if(!checked[i])
                 makeGraphPairs(checked, i, athlete2, pairs, athletes);
         }
     }
+}*/
+
+vector<int> dijkstra(const Graph& graph, int src)
+{
+    vector<int> distance(graph.vertices);
+    bool visited[graph.vertices];
+
+    for(int i = 0; i < graph.vertices; i++)
+    {
+        distance[i] = numeric_limits<int>::max();
+        visited[i] = false;
+    }
+
+    distance[src] = 0;
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push(make_pair(0, src));
+    while(!pq.empty())
+    {
+        int u = pq.top().second;
+        pq.pop();
+
+        for(int i = 0; i < graph.adj_list[u].size(); i++)
+        {
+            int v = graph.adj_list[u][i].first;
+            int weight = graph.adj_list[u][i].second;
+
+            if(distance[v] > distance[u] + weight)
+            {
+                distance[v] = distance[u] + weight;
+                pq.push(make_pair(distance[v], v));
+            }
+        }
+    }
+    return distance;
 }
 
 int main()
@@ -175,25 +208,14 @@ int main()
     vector<athlete> athletes;
     readAthleteCSV("olympicdata.csv", athletes);
 
-   /* vector<pair<int, int>> pairs;
+    vector<pair<int, int>> pairs;
     readPairsCSV("pairs.csv", pairs);
-    auto *olympicGraph = new Graph(athletes.size());
+    auto olympicGraph = new Graph(athletes.size());
 
     for(int i = 0; i < pairs.size(); i++)
     {
         olympicGraph->addEdge(pairs[i].first, pairs[i].second, athletes[pairs[i].first].medalCount + athletes[pairs[i].second].medalCount);
     }
-*/
-    /*for(int i = 0; i < athletes.size(); i++)
-    {
-        for(int j = 0; j < athletes.size(); j++)
-        {
-            if(i != j && (athletes[i].olympicTeam == athletes[j].olympicTeam || athletes[i].sport == athletes[j].sport))
-                olympicGraph->addEdge(i, j, athletes[i].medalCount + athletes[j].medalCount);
-        }
-    }*/
-
-
 
     string keepgoing = "yes";
     while(keepgoing == "yes")
@@ -210,12 +232,10 @@ int main()
 
         cout << "Connecting " << athletes[stoi(athlete1)].name << " to " << athletes[stoi(athlete2)].name << "..." << endl;
 
-        //vector<pair<int, int>> pairs;
-        //int start = stoi(athlete1);
-       // int athlete2int = stoi(athlete2);
-        // set<int> checked;
-        //map<int, set<int>> checked;
-        //makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);
+        /*vector<pair<int, int>> pairs;
+        int athlete2int = stoi(athlete2);
+        map<int, bool> checked;
+        makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);*/
 
         // dijkstra's
         // bellman ford
