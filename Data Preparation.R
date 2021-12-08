@@ -27,4 +27,29 @@ while(i < nrow(olympics))
   }
 }
 
+olympics <- olympics[, -1]
 write.csv(olympics, "olympicdata.csv")
+
+##### ONCE THE CSV HAS BEEN WRITTEN.... #####
+olympics <- read.csv("olympicdata.csv")
+olympics <- olympics[,-1]
+
+set.seed(88)
+tokeep <- sample(nrow(olympics), 100000, replace = FALSE)
+
+
+olympics <- olympics[tokeep, ]
+row.names(olympics) <- NULL
+write.csv(olympics, "olympicdata.csv")
+
+pairs <- read.csv("pairs.csv")
+
+pairs$Line_x <- as.integer(pairs$Line_x)
+pairs$Line_y <- as.integer(pairs$Line_y)
+str(pairs)
+length(which(pairs$Line_x == 9))
+
+head(pairs)
+pairs <- pairs[-1,]       
+
+write.csv(pairs, "pairs.csv")
