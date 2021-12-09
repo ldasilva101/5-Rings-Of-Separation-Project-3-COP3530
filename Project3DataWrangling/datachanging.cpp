@@ -39,7 +39,7 @@ void Graph::addEdge(int athleteA, int athleteB, int medalCount)
 // prints athlete info in condensed version, to be used in displaying paths
 void printBasicInfo(int athleteID, vector<athlete> &athletes)
 {
-    cout << "Athlete " << athletes[athleteID].index << ": " << athletes[athleteID].name << ", " << athletes[athleteID].olympicTeam << ", " << athletes[athleteID].sport;
+    cout << "Athlete " << athletes[athleteID].index << ": " << athletes[athleteID].name << ", " << athletes[athleteID].olympicTeam << ", " << athletes[athleteID].sport << ", Total Medals: " << athletes[athleteID].medalCount;
 }
 
 // prints the full athlete information upon user's request
@@ -151,9 +151,9 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
 
                 pairs.push_back(make_pair(athleteA, athleteB));
             }
-            i++;
-            if(i == 500)
-                break;
+         //   i++;
+        //    if(i == 500)
+         //       break;
         }
     }
 }
@@ -230,7 +230,7 @@ vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
     }
     //Step 2 Relax Edges
     dist[src] = 0;
-    for (int i = 0; i < graph.vertices; i++) {
+    for (int i = 0; i < graph.adj_list.size(); i++) {
         for (int j = 0; j < graph.adj_list[i].size(); j++) {
             auto u = i;
             auto v = graph.adj_list[i][j].first; //to vertex
@@ -242,8 +242,10 @@ vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
         }
     }
     //Step 3, negative cycles
-    for (int i = 0; i < graph.vertices; i++) {
-        for (int j = 0; j < graph.adj_list[i].size(); j++) {
+    for (int i = 0; i < graph.adj_list.size(); i++)
+    {
+        for (int j = 0; j < graph.adj_list[i].size(); j++)
+        {
             int u = i;
             int v = graph.adj_list[i][j].first;
             double w = graph.adj_list[i][j].second;
@@ -255,7 +257,8 @@ vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
         }
     }
 
-    if(prev[dest] != -1){
+    if(prev[dest] != -1)
+    {
         success = true;
         return printSolution(prev, dest, src);
     }
@@ -263,7 +266,7 @@ vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
     return prev;
 }
 
-// performs breadth-first search to find shortest path between two athletes
+// performs breadth-first search to find shortest path between two athletes (does not factor in weights)
 vector<int> BFS(Graph &graph, int start, int end, int vertices, int prev[], int dist[], bool &success)
 {
     success = false;
@@ -283,18 +286,18 @@ vector<int> BFS(Graph &graph, int start, int end, int vertices, int prev[], int 
     order.push_back(start);
 
     while (order.size() != 0) {
-        int u = order.front();
+        int top = order.front();
         order.pop_front();
-        for (int i = 0; i < graph.adj_list[u].size(); i++)
+        for (int i = 0; i < graph.adj_list[top].size(); i++)
         {
-            if (!visited[graph.adj_list[u][i].first])
+            if (!visited[graph.adj_list[top][i].first])
             {
-                visited[graph.adj_list[u][i].first] = true;
-                dist[graph.adj_list[u][i].first] = dist[u] + 1;
-                prev[graph.adj_list[u][i].first] = u;
-                order.push_back(graph.adj_list[u][i].first);
+                visited[graph.adj_list[top][i].first] = true;
+                dist[graph.adj_list[top][i].first] = dist[top] + 1;
+                prev[graph.adj_list[top][i].first] = top;
+                order.push_back(graph.adj_list[top][i].first);
 
-                if (graph.adj_list[u][i].first == end)
+                if (graph.adj_list[top][i].first == end)
                     success = true;
             }
         }
@@ -330,36 +333,42 @@ int main()
         olympicGraph.addEdge(pairs[i].first, pairs[i].second, athletes[pairs[i].first].medalCount + athletes[pairs[i].second].medalCount);
     }
 
+    cout
+            << "     _______________" << endl
+            << "    |@@@@|     |####|" << endl
+            << "    |@@@@|     |####|" << endl
+            << "    |@@@@|     |####|" << endl
+            << "    \\@@@@|     |####/" << endl
+            << "     \\@@@|     |###/" << endl
+            << "      `@@|_____|##'" << endl
+            << "           (O)" << endl
+            << "        .-'''''-." << endl
+            << "      .'  * * *  `." << endl
+            << "     :  *       *  :" << endl
+            << "    : ~  O A C C  ~ :" << endl
+            << "    : ~ A W A R D ~ :" << endl
+            << "     :  *       *  :" << endl
+            << "      `.  * * *  .'" << endl
+            << "        `-.....-'" << endl;
+
+    cout << "Welcome to the Five Rings of Separation!" << endl;
+    cout << "----------------------------------------" << endl;
     string keepgoing = "yes";
     while(keepgoing == "yes")
     {
         string athlete1;
         string athlete2;
-        cout
-                << "     _______________" << endl
-                << "    |@@@@|     |####|" << endl
-                << "    |@@@@|     |####|" << endl
-                << "    |@@@@|     |####|" << endl
-                << "    \\@@@@|     |####/" << endl
-                << "     \\@@@|     |###/" << endl
-                << "      `@@|_____|##'" << endl
-                << "           (O)" << endl
-                << "        .-'''''-." << endl
-                << "      .'  * * *  `." << endl
-                << "     :  *       *  :" << endl
-                << "    : ~  O A C C  ~ :" << endl
-                << "    : ~ A W A R D ~ :" << endl
-                << "     :  *       *  :" << endl
-                << "      `.  * * *  .'" << endl
-                << "        `-.....-'" << endl;
-
-        cout << "Welcome to the Five Rings of Separation!" << endl;
-        cout << "----------------------------------------" << endl;
         cout << "Enter the indices of the athletes you'd like to connect: (0 - " << athletes.size() - 1 << ")" << endl;
         cout << "Athlete 1: ";
         cin >> athlete1;
         cout << "Athlete 2: ";
         cin >> athlete2;
+
+        if(stoi(athlete1) < 0 || stoi(athlete1) > 99999 || stoi(athlete2) < 0 || stoi(athlete2) > 99999)
+        {
+            cout << "Invalid athlete indices. Please try again." << endl << endl;
+            continue;
+        }
 
         cout << endl << "Connecting " << athletes[stoi(athlete1)].name << " to " << athletes[stoi(athlete2)].name << "..." << endl << endl;
 
@@ -377,7 +386,7 @@ int main()
         else
         {
             cout << "A path was found between your athletes!" << endl;
-            cout << "Breadth-First Search found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << "Breadth-First Search found the following path with the most medals between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             for(int i = path.size() - 1; i >= 0; i--)
             {
                 printBasicInfo(path[i], athletes);
@@ -387,11 +396,7 @@ int main()
             auto duration3 = duration_cast<microseconds>(stop3 - start3);
 
             // DIJKSTRA'S ALGORITHM
-            cout << endl << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
-            // dijkstra's
-            //int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
-            // int begin = stoi(athlete1);
-            // int end = stoi(athlete2);
+            cout << endl << "Dijkstra's Algorithm found the following path with the most medals between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             vector<int> dist(olympicGraph.vertices), prev(olympicGraph.vertices);
             int begin = stoi(athlete1);
             int end = stoi(athlete2);
@@ -420,11 +425,12 @@ int main()
             auto duration2 = duration_cast<microseconds>(stop2 - start2);
 
             // comparing the performance of the algorithms
-            cout << endl << endl << "The diagnostics for the performance of these algorithms was: " << endl;
-            cout << "-------------------------------------------------------------" << endl;
+            cout << endl << endl << "PERFORMANCE DIAGNOSTICS" << endl;
+            cout << "-----------------------" << endl;
             cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
             cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
             cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
+            cout << "-----------------------" << endl;
         }
 
         // users can ask for more detailed information about any athlete from the path
