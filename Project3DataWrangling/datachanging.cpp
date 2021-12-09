@@ -8,6 +8,7 @@
 #include <queue>
 #include "athlete.h"
 using namespace std;
+using namespace std::chrono;
 
 class Graph
 {
@@ -16,7 +17,7 @@ public:
     int vertices;
     Graph(int n)
     {
-        vertices = n;
+        adj_list.resize(n);
     }
     void addEdge(int athleteA, int athleteB, int medalCount);
 };
@@ -127,6 +128,7 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
         string fileLine;
         getline(inFile, fileLine);
 
+        i = 0;
         while (getline(inFile, fileLine))
         {
             istringstream stream(fileLine);
@@ -141,9 +143,6 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
             getline(stream, athleteAstr, ',');
             getline(stream, athleteBstr, ',');
 
-            cout << i << endl;
-            i++;
-
             if(athleteAstr != "NA")
             {
                 int athleteA = stoi(athleteAstr);
@@ -151,6 +150,9 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
 
                 pairs.push_back(make_pair(athleteA, athleteB));
             }
+            i++;
+            if(i == 50)
+                break;
         }
     }
 }
@@ -354,7 +356,7 @@ void dijkstra(const Graph& graph, int src, int dest)
 }
 
 // not totally correct :)
-/*void bfs(const Graph& graph, int src) {
+void bfs(const Graph& graph, int src, int end) {
     set<int> visited;
     queue<int> search;
 
@@ -367,7 +369,7 @@ void dijkstra(const Graph& graph, int src, int dest)
         cout << element << " ";
         search.pop();
 
-        vector<int> connections = graph.adj_list[element];
+        vector<pair<int, double>> connections = graph.adj_list[element];
         sort(connections.begin(), connections.begin() + connections.size());
 
         for(int i = 0; i < connections.size(); i++)
@@ -379,7 +381,7 @@ void dijkstra(const Graph& graph, int src, int dest)
             }
         }
     }
-}*/
+}
 
 
 int main()
@@ -389,11 +391,12 @@ int main()
 
     vector<pair<int, int>> pairs;
     readPairsCSV("pairs.csv", pairs);
-    auto olympicGraph = new Graph(athletes.size());
+    auto olympicGraph = Graph(athletes.size());
+    cout << "here";
 
     for(int i = 0; i < pairs.size(); i++)
     {
-        olympicGraph->addEdge(pairs[i].first, pairs[i].second, athletes[pairs[i].first].medalCount + athletes[pairs[i].second].medalCount);
+        olympicGraph.addEdge(pairs[i].first, pairs[i].second, athletes[pairs[i].first].medalCount + athletes[pairs[i].second].medalCount);
     }
 
     string keepgoing = "yes";
@@ -409,23 +412,40 @@ int main()
         cout << "Athlete 2: ";
         cin >> athlete2;
 
-        cout << "Connecting " << athletes[stoi(athlete1)].name << " to " << athletes[stoi(athlete2)].name << "..." << endl;
+        cout << endl << "Connecting " << athletes[stoi(athlete1)].name << " to " << athletes[stoi(athlete2)].name << "..." << endl;
 
         /*vector<pair<int, int>> pairs;
         int athlete2int = stoi(athlete2);
         map<int, bool> checked;
         makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);*/
 
+        cout << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
         // dijkstra's
-        //int dist[olympicGraph->vertices], prev[olympicGraph->vertices];
-        int start = stoi(athlete1);
+        int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
+        int begin = stoi(athlete1);
         int end = stoi(athlete2);
-        dijkstra(*olympicGraph, start, end);
+        auto start = high_resolution_clock::now();
+       // dijkstra(olympicGraph, begin, end);
+        auto stop = high_resolution_clock::now();
+        auto duration1 = duration_cast<seconds>(stop - start);
 
+        cout << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
         // bellman ford
-        // bfs or something
-        // print basic info in these
+        start;
+        stop;
+        auto duration2 = duration_cast<seconds>(stop - start);
 
+        cout << "Breadth-First Search found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+        // bfs or something
+        start;
+        bfs(olympicGraph, begin, end);
+        stop;
+        auto duration3 = duration_cast<seconds>(stop - start);
+
+        cout << "The diagnostics for the performance of these algorithms was: " << endl;
+        cout << "Dijkstra's Algorithm: " << duration1.count() << " seconds" << endl;
+        cout << "Bellman-Ford Algorithm: " << duration2.count() << " seconds" << endl;
+        cout << "Breadth-First Search: " << duration3.count() << " seconds" << endl;
         // after doing the paths between athletes, ask user if they'd like some in-depth information about any of them
         string moreInfo;
         cout << "Would you like more in-depth information about any given athlete? (yes/no): ";
