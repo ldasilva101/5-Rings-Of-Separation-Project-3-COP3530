@@ -152,295 +152,165 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
                 pairs.push_back(make_pair(athleteA, athleteB));
             }
             i++;
-            if(i == 50)
+            if(i == 500)
                 break;
         }
     }
 }
 
-/*void makeGraphPairs(map<int, bool> &checked, int athlete1, int &athlete2, vector<pair<int, int>> &pairs, vector<athlete> &athletes)
-{
-    checked[athlete1] = true;
-
-    for(int i = 0; i < athletes.size(); i++)
-    {
-        if(i != athlete1 && (athletes[i].olympicTeam == athletes[athlete1].olympicTeam || athletes[i].sport == athletes[athlete1].sport))
-        {
-            pairs.push_back(make_pair(athlete1, i));
-            if(i == athlete2)
-            {
-                cout << "goal reached" << endl;
-                break;
-            }
-            else if(!checked[i])
-                makeGraphPairs(checked, i, athlete2, pairs, athletes);
-        }
-    }
-}*/
-
-/*vector<int> dijkstra(const Graph& graph, int src)
-{
-    vector<int> distance(graph.vertices);
-    bool visited[graph.vertices];
-
-    for(int i = 0; i < graph.vertices; i++)
-    {
-        distance[i] = numeric_limits<int>::max();
-        visited[i] = false;
-    }
-
-    distance[src] = 0;
-
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push(make_pair(0, src));
-    while(!pq.empty())
-    {
-        int u = pq.top().second;
-        pq.pop();
-
-        for(int i = 0; i < graph.adj_list[u].size(); i++)
-        {
-            int v = graph.adj_list[u][i].first;
-            int weight = graph.adj_list[u][i].second;
-
-            if(distance[v] > distance[u] + weight)
-            {
-                distance[v] = distance[u] + weight;
-                pq.push(make_pair(distance[v], v));
-            }
-        }
-    }
-    return distance;
-}*/
-
-/*void dijkstra(const Graph& graph, int *dist, int *prev, int start)
-{
-    int n = graph.vertices;
-
-    for(int u = 0; u<n; u++) {
-        dist[u] = 9999;   //set as infinity
-        prev[u] = -1;    //undefined previous
-    }
-
-    dist[start] = 0;   //distance of start is 0
-    set<int> S;       //create empty set S
-    list<int> Q;
-
-    for(int u = 0; u<n; u++) {
-        Q.push_back(u);    //add each node into queue
-    }
-
-    while(!Q.empty()) {
-        list<int> :: iterator i;
-        i = min_element(Q.begin(), Q.end());
-        int u = *i; //the minimum element from queue
-        Q.remove(u);
-        S.insert(u); //add u in the set
-        for(int k = 0; k < graph.adj_list[u].size(); k++) {
-            pair<int, int> it = graph.adj_list[u][k];
-            if((dist[u]+(it.second)) < dist[it.first]) { //relax (u,v)
-                dist[it.second] = (dist[u]+(it.first));
-                prev[it.first] = u;
-            }
-        }
-    }
-}*/
-
-int minDistance(int dist[], bool sptSet[], int V)
-{
-
-    // Initialize min value
-    int min = INT_MAX, min_index;
-
-    for (int v = 0; v < V; v++)
-        if (sptSet[v] == false &&
-            dist[v] <= min)
-            min = dist[v], min_index = v;
-
-    return min_index;
-}
-
-void printPath(int parent[], int j)
+void printPath(vector<int> parent, int j, vector<int> &path)
 {
 
     // Base Case : If j is source
     if (parent[j] == - 1)
         return;
 
-    printPath(parent, parent[j]);
+    printPath(parent, parent[j], path);
 
-    printf("%d ", j);
+    path.push_back(j);
 }
 
-void printSolution(int dist[], int n,
-                   int parent[], int dest)
+vector<int> printSolution(vector<int> parent, int dest, int src)
 {
-    int src = 0;
-    printf("Vertex\t Distance\tPath");
-    printf("\n%d -> %d \t\t %d\t\t%d ",
-           src, dest, dist[dest], src);
-    printPath(parent, dest);
+    vector<int> path;
+    path.push_back(src);
+    printPath(parent, dest, path);
+    return path;
 }
 
-// Function that implements Dijkstra's
-// single source shortest path
-// algorithm for a graph represented
-// using adjacency matrix representation
-void dijkstra(const Graph& graph, int src, int dest)
+vector<int> dijkstra(const Graph& graph, vector<int> &dist, vector<int> &prev, int src, int dest, bool &success)
 {
-
-    // The output array. dist[i]
-    // will hold the shortest
-    // distance from src to i
-    int dist[graph.vertices];
-
-    // sptSet[i] will true if vertex
-    // i is included / in shortest
-    // path tree or shortest distance
-    // from src to i is finalized
-    bool sptSet[graph.vertices];
-
-    // Parent array to store
-    // shortest path tree
-    int parent[graph.vertices];
-
-    // Initialize all distances as
-    // INFINITE and stpSet[] as false
-    for (int i = 0; i < graph.vertices; i++)
+    vector<int> distance(graph.vertices);
+    bool visited[graph.vertices];
+    vector<int> parent(graph.vertices);
+    for(int i = 0; i < graph.vertices; i++)
     {
-        parent[0] = -1;
-        dist[i] = INT_MAX;
-        sptSet[i] = false;
+        parent[i] = -1;
+        distance[i] = numeric_limits<int>::max();
+        visited[i] = false;
     }
-
-    // Distance of source vertex
-    // from itself is always 0
-    dist[src] = 0;
-
-    // Find shortest path
-    // for all vertices
-    for (int count = 0; count < graph.vertices - 1; count++)
+    distance[src] = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push(make_pair(0, src));
+    while(!pq.empty())
     {
-        // Pick the minimum distance
-        // vertex from the set of
-        // vertices not yet processed.
-        // u is always equal to src
-        // in first iteration.
-        int u = minDistance(dist, sptSet, graph.vertices);
-
-        // Mark the picked vertex
-        // as processed
-        sptSet[u] = true;
-
-        // Update dist value of the
-        // adjacent vertices of the
-        // picked vertex.
-        for (int v = 0; v < graph.vertices; v++)
-
-            // Update dist[v] only if is
-            // not in sptSet, there is
-            // an edge from u to v, and
-            // total weight of path from
-            // src to v through u is smaller
-            // than current value of
-            // dist[v]
-            if (!sptSet[v] && graph.adj_list[u][v].second && dist[u] + graph.adj_list[u][v].second < dist[v])
+        int u = pq.top().second;
+        pq.pop();
+        for(int i = 0; i < graph.adj_list[u].size(); i++)
+        {
+            int v = graph.adj_list[u][i].first;
+            int weight = graph.adj_list[u][i].second;
+            if(distance[v] > distance[u] + weight)
             {
                 parent[v] = u;
-                dist[v] = dist[u] + graph.adj_list[u][v].second;
+                distance[v] = distance[u] + weight;
+                pq.push(make_pair(distance[v], v));
             }
+        }
     }
 
-    // print the constructed
-    // distance array
-    printSolution(dist, graph.vertices, parent, dest);
+    if(parent[dest] != -1){
+        success = true;
+        return printSolution(parent, dest, src);
+    }
+    success = false;
+    return parent;
 }
 
-void bellmanFord(Graph& graph, int src, int dest)
-{
+vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
     //Step 1 initialize everything
     int dist[graph.vertices];
     bool sptSet[graph.vertices];
-    int prev[graph.vertices];
+    vector<int> prev(graph.vertices);
 
-    for (int i = 0; i < graph.vertices; i++)
-    {
+    for (int i = 0; i < graph.vertices; i++) {
         dist[i] = INT_MAX;
         prev[0] = -1;
         sptSet[i] = false;
     }
     //Step 2 Relax Edges
     dist[src] = 0;
-    for (int i = 0; i < graph.vertices; i++)
-    {
-        for (int j = 0; j < graph.adj_list[i].size(); j++)
-        {
+    for (int i = 0; i < graph.vertices; i++) {
+        for (int j = 0; j < graph.adj_list[i].size(); j++) {
             auto u = i;
             auto v = graph.adj_list[i][j].first; //to vertex
             double w = graph.adj_list[i][j].second; //weight of edge
-            if (dist[u] + w < dist[v])
-            {
+            if (dist[u] + w < dist[v]) {
                 dist[v] = dist[u] + w;
                 prev[v] = u;
             }
         }
     }
     //Step 3, negative cycles
-    for (int i = 0; i < graph.vertices; i++)
-    {
-        for (int j = 0; j < graph.adj_list[i].size(); j++)
-        {
+    for (int i = 0; i < graph.vertices; i++) {
+        for (int j = 0; j < graph.adj_list[i].size(); j++) {
             int u = i;
             int v = graph.adj_list[i][j].first;
             double w = graph.adj_list[i][j].second;
             if (dist[u] + w < dist[v]) {
                 cout << "Graph contains a negative";
-                return;
+                success = false;
+                return prev;
             }
         }
     }
-    printSolution(dist, graph.vertices, prev, dest);
+
+    if(prev[dest] != -1){
+        success = true;
+        return printSolution(prev, dest, src);
+    }
+    success = false;
+    return prev;
 }
 
-// performs breadth-first search to find a path between two athletes
-vector<int> bfs(const Graph& graph, pair<int, double> src, pair<int, double> end, vector<athlete> &athletes, bool &success) {
-    vector<int> path;
-
+// performs breadth-first search to find shortest path between two athletes
+vector<int> BFS(Graph &graph, int start, int end, int vertices, int prev[], int dist[], bool &success)
+{
     success = false;
+    list<int> order;
 
-    set<pair<int,double>> visited;
-    queue<pair<int,int>> search;
+    bool visited[vertices];
 
-    visited.insert(src);
-    search.push(src);
-
-    while(!search.empty())
+    for (int i = 0; i < vertices; i++)
     {
-        int element = search.front().first;
-        path.push_back(element);
-        if(element == end.first)
-        {
-            success = true;
-            break;
-        }
-        search.pop();
+        visited[i] = false;
+        dist[i] = INT_MAX;
+        prev[i] = -1;
+    }
 
-        vector<pair<int, double>> connections = graph.adj_list[element];
-        sort(connections.begin(), connections.begin() + connections.size());
+    visited[start] = true;
+    dist[start] = 0;
+    order.push_back(start);
 
-        for(int i = 0; i < connections.size(); i++)
+    while (order.size() != 0) {
+        int u = order.front();
+        order.pop_front();
+        for (int i = 0; i < graph.adj_list[u].size(); i++)
         {
-            if(visited.count(connections[i]) == 0)
+            if (!visited[graph.adj_list[u][i].first])
             {
-                visited.insert(connections[i]);
-                search.push(connections[i]);
+                visited[graph.adj_list[u][i].first] = true;
+                dist[graph.adj_list[u][i].first] = dist[u] + 1;
+                prev[graph.adj_list[u][i].first] = u;
+                order.push_back(graph.adj_list[u][i].first);
+
+                if (graph.adj_list[u][i].first == end)
+                    success = true;
             }
         }
+    }
+
+    vector<int> path;
+    int check = end;
+    path.push_back(check);
+    while(prev[check] != -1)
+    {
+        path.push_back(prev[check]);
+        check = prev[check];
     }
 
     return path;
 }
-
 
 int main()
 {
@@ -465,6 +335,23 @@ int main()
     {
         string athlete1;
         string athlete2;
+        cout
+                << "     _______________" << endl
+                << "    |@@@@|     |####|" << endl
+                << "    |@@@@|     |####|" << endl
+                << "    |@@@@|     |####|" << endl
+                << "    \\@@@@|     |####/" << endl
+                << "     \\@@@|     |###/" << endl
+                << "      `@@|_____|##'" << endl
+                << "           (O)" << endl
+                << "        .-'''''-." << endl
+                << "      .'  * * *  `." << endl
+                << "     :  *       *  :" << endl
+                << "    : ~  O A C C  ~ :" << endl
+                << "    : ~ A W A R D ~ :" << endl
+                << "     :  *       *  :" << endl
+                << "      `.  * * *  .'" << endl
+                << "        `-.....-'" << endl;
 
         cout << "Welcome to the Five Rings of Separation!" << endl;
         cout << "----------------------------------------" << endl;
@@ -476,17 +363,12 @@ int main()
 
         cout << endl << "Connecting " << athletes[stoi(athlete1)].name << " to " << athletes[stoi(athlete2)].name << "..." << endl << endl;
 
-        /*vector<pair<int, int>> pairs;
-        int athlete2int = stoi(athlete2);
-        map<int, bool> checked;
-        makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);*/
-
         // BREADTH-FIRST SEARCH
-        pair<int, double> bfsSrc = make_pair(stoi(athlete1), athletes[stoi(athlete1)].weight);
-        pair<int, double> bfsEnd = make_pair(stoi(athlete2), athletes[stoi(athlete2)].weight);
+        //  since this is the quickest, it will be used to check if there's a full path between two athletes before the longer algorithms even run
         bool success = false;
         auto start3 = high_resolution_clock::now();
-        vector<int> path = bfs(olympicGraph, bfsSrc, bfsEnd, athletes, success);
+        int pred[olympicGraph.vertices], dist[olympicGraph.vertices];
+        vector<int> path = BFS(olympicGraph, stoi(athlete1), stoi(athlete2), olympicGraph.vertices, pred, dist, success);
         auto stop3 = high_resolution_clock::now();
         if(!success) // only prints a path if there is a full one between two athletes from BFS
         {
@@ -496,7 +378,7 @@ int main()
         {
             cout << "A path was found between your athletes!" << endl;
             cout << "Breadth-First Search found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
-            for(int i = 0; i < path.size(); i++)
+            for(int i = path.size() - 1; i >= 0; i--)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
@@ -510,24 +392,39 @@ int main()
             //int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
             // int begin = stoi(athlete1);
             // int end = stoi(athlete2);
+            vector<int> dist(olympicGraph.vertices), prev(olympicGraph.vertices);
+            int begin = stoi(athlete1);
+            int end = stoi(athlete2);
+            bool success = false;
             auto start1 = high_resolution_clock::now();
-            // dijkstra(olympicGraph, begin, end);
+            vector<int> path = dijkstra(olympicGraph, dist, prev, begin, end, success);
             auto stop1 = high_resolution_clock::now();
+            for(int i = 0; i < path.size(); i++)
+            {
+                printBasicInfo(path[i], athletes);
+                cout << endl;
+            }
             auto duration1 = duration_cast<microseconds>(stop1 - start1);
 
             // BELLMAN-FORD ALGORITHM
             cout << endl << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             auto start2 = high_resolution_clock::now();
-            bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2));
+            success = false;
+            path = bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2), success);
+            for(int i = 0; i < path.size(); i++)
+            {
+                printBasicInfo(path[i], athletes);
+                cout << endl;
+            }
             auto stop2 = high_resolution_clock::now();
             auto duration2 = duration_cast<microseconds>(stop2 - start2);
 
             // comparing the performance of the algorithms
             cout << endl << endl << "The diagnostics for the performance of these algorithms was: " << endl;
             cout << "-------------------------------------------------------------" << endl;
+            cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
             cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
             cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
-            cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
         }
 
         // users can ask for more detailed information about any athlete from the path
