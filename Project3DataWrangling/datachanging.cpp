@@ -356,33 +356,40 @@ void dijkstra(const Graph& graph, int src, int dest)
     printSolution(dist, graph.vertices, parent, dest);
 }
 
-void bellmanFord(Graph& graph, int src, int dest) {
+void bellmanFord(Graph& graph, int src, int dest)
+{
     //Step 1 initialize everything
     int dist[graph.vertices];
     bool sptSet[graph.vertices];
     int prev[graph.vertices];
 
-    for (int i = 0; i < graph.vertices; i++) {
+    for (int i = 0; i < graph.vertices; i++)
+    {
         dist[i] = INT_MAX;
         prev[0] = -1;
         sptSet[i] = false;
     }
     //Step 2 Relax Edges
     dist[src] = 0;
-    for (int i = 0; i < graph.vertices; i++) {
-        for (int j = 0; j < graph.adj_list[i].size(); j++) {
+    for (int i = 0; i < graph.vertices; i++)
+    {
+        for (int j = 0; j < graph.adj_list[i].size(); j++)
+        {
             auto u = i;
             auto v = graph.adj_list[i][j].first; //to vertex
             double w = graph.adj_list[i][j].second; //weight of edge
-            if (dist[u] + w < dist[v]) {
+            if (dist[u] + w < dist[v])
+            {
                 dist[v] = dist[u] + w;
                 prev[v] = u;
             }
         }
     }
     //Step 3, negative cycles
-    for (int i = 0; i < graph.vertices; i++) {
-        for (int j = 0; j < graph.adj_list[i].size(); j++) {
+    for (int i = 0; i < graph.vertices; i++)
+    {
+        for (int j = 0; j < graph.adj_list[i].size(); j++)
+        {
             int u = i;
             int v = graph.adj_list[i][j].first;
             double w = graph.adj_list[i][j].second;
@@ -474,51 +481,54 @@ int main()
         map<int, bool> checked;
         makeGraphPairs(checked, stoi(athlete1), athlete2int, pairs, athletes);*/
 
-        // DIJKSTRA'S ALGORITHM
-        cout << "Finding the connections between  " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << " using Dijkstra's Algorithm:" << endl;
-        // dijkstra's
-        //int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
-       // int begin = stoi(athlete1);
-       // int end = stoi(athlete2);
-        auto start1 = high_resolution_clock::now();
-       // dijkstra(olympicGraph, begin, end);
-        auto stop1 = high_resolution_clock::now();
-        auto duration1 = duration_cast<microseconds>(stop1 - start1);
-
-        // BELLMAN-FORD ALGORITHM
-        cout << "Finding the connections between  " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << " using the Bellman-Ford Algorithm:" << endl;
-        auto start2 = high_resolution_clock::now();
-        bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2));
-        auto stop2 = high_resolution_clock::now();
-        auto duration2 = duration_cast<microseconds>(stop2 - start2);
-
         // BREADTH-FIRST SEARCH
-        cout << "Finding the connections between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << " using Breadth-First Search:" << endl;
         pair<int, double> bfsSrc = make_pair(stoi(athlete1), athletes[stoi(athlete1)].weight);
         pair<int, double> bfsEnd = make_pair(stoi(athlete2), athletes[stoi(athlete2)].weight);
         bool success = false;
         auto start3 = high_resolution_clock::now();
         vector<int> path = bfs(olympicGraph, bfsSrc, bfsEnd, athletes, success);
         auto stop3 = high_resolution_clock::now();
-        if(success) // only prints a path if there is a full one between two athletes from BFS
+        if(!success) // only prints a path if there is a full one between two athletes from BFS
+        {
+            cout << "It looks like there is no path that fully connects " <<  athletes[stoi(athlete2)].name << " and " << athletes[stoi(athlete1)].name << "." << endl << endl;
+        }
+        else
         {
             cout << "A path was found between your athletes!" << endl;
+            cout << "Breadth-First Search found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             for(int i = 0; i < path.size(); i++)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
-        }
-        else // will not print a partial path from BFS
-            cout << "Based on BFS, it looks like there are no connections that reach " <<  athletes[stoi(athlete2)].name << " from " << athletes[stoi(athlete1)].name << "." << endl;
-        auto duration3 = duration_cast<microseconds>(stop3 - start3);
 
-        // comparing the performance of the algorithms
-        cout << endl << "The diagnostics for the performance of these algorithms was: " << endl;
-        cout << "-------------------------------------------------------------" << endl;
-        cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
-        cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
-        cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
+            auto duration3 = duration_cast<microseconds>(stop3 - start3);
+
+            // DIJKSTRA'S ALGORITHM
+            cout << endl << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            // dijkstra's
+            //int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
+            // int begin = stoi(athlete1);
+            // int end = stoi(athlete2);
+            auto start1 = high_resolution_clock::now();
+            // dijkstra(olympicGraph, begin, end);
+            auto stop1 = high_resolution_clock::now();
+            auto duration1 = duration_cast<microseconds>(stop1 - start1);
+
+            // BELLMAN-FORD ALGORITHM
+            cout << endl << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            auto start2 = high_resolution_clock::now();
+            bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2));
+            auto stop2 = high_resolution_clock::now();
+            auto duration2 = duration_cast<microseconds>(stop2 - start2);
+
+            // comparing the performance of the algorithms
+            cout << endl << endl << "The diagnostics for the performance of these algorithms was: " << endl;
+            cout << "-------------------------------------------------------------" << endl;
+            cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
+            cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
+            cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
+        }
 
         // users can ask for more detailed information about any athlete from the path
         string moreInfo;
