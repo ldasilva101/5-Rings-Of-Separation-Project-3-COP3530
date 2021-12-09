@@ -11,13 +11,29 @@ using namespace std;
 using namespace std::chrono;
 
 // graph implementation will be an adjacency list
+struct Edge
+{
+    int src, dest;
+    double weight;
+
+    Edge(int src, int dest, double weight)
+    {
+        this->src = src;
+        this->dest = dest;
+        this->weight = weight;
+    }
+};
+
 class Graph
 {
 public:
+    vector<Edge> edges;
     vector<vector<pair<int, double>>> adj_list;
     int vertices;
+    int numEdges;
     Graph(int n)
     {
+        numEdges = 0;
         adj_list.resize(n);
     }
     void addEdge(int athleteA, int athleteB, int medalCount);
@@ -32,8 +48,11 @@ void Graph::addEdge(int athleteA, int athleteB, int medalCount)
     else
         weight = 1.0 / medalCount;
 
+    edges.emplace_back(athleteA, athleteB, weight);
+
     adj_list[athleteA].push_back(make_pair(athleteB, weight));
     adj_list[athleteB].push_back(make_pair(athleteA, weight));
+    numEdges++;
 }
 
 // prints athlete info in condensed version, to be used in displaying paths
@@ -57,7 +76,8 @@ void printFullInfo(int athleteID, vector<athlete> &athletes)
 }
 
 // used in reading in the athlete data to create an athlete object in the right format
-void addAthlete(int index, string name, string team, string sport, string event, vector<athlete> &athletes){
+void addAthlete(int index, string name, string team, string sport, string event, vector<athlete> &athletes)
+{
     vector<string> events;
 
     size_t start;
@@ -124,7 +144,6 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
 {
     ifstream inFile(filename);
 
-    int i = 0;
     if(inFile.is_open())
     {
         string fileLine;
@@ -151,9 +170,6 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
 
                 pairs.push_back(make_pair(athleteA, athleteB));
             }
-         //   i++;
-        //    if(i == 500)
-         //       break;
         }
     }
 }
@@ -180,7 +196,7 @@ vector<int> printSolution(vector<int> parent, int dest, int src)
 
 vector<int> dijkstra(const Graph& graph, vector<int> &dist, vector<int> &prev, int src, int dest, bool &success)
 {
-    vector<int> distance(graph.vertices);
+    vector<double> distance(graph.vertices);
     bool visited[graph.vertices];
     vector<int> parent(graph.vertices);
     for(int i = 0; i < graph.vertices; i++)
@@ -199,7 +215,7 @@ vector<int> dijkstra(const Graph& graph, vector<int> &dist, vector<int> &prev, i
         for(int i = 0; i < graph.adj_list[u].size(); i++)
         {
             int v = graph.adj_list[u][i].first;
-            int weight = graph.adj_list[u][i].second;
+            double weight = graph.adj_list[u][i].second;
             if(distance[v] > distance[u] + weight)
             {
                 parent[v] = u;
@@ -209,7 +225,8 @@ vector<int> dijkstra(const Graph& graph, vector<int> &dist, vector<int> &prev, i
         }
     }
 
-    if(parent[dest] != -1){
+    if(parent[dest] != -1)
+    {
         success = true;
         return printSolution(parent, dest, src);
     }
@@ -217,43 +234,45 @@ vector<int> dijkstra(const Graph& graph, vector<int> &dist, vector<int> &prev, i
     return parent;
 }
 
-vector<int> bellmanFord(Graph& graph, int src, int dest, bool &success) {
-    //Step 1 initialize everything
-    int dist[graph.vertices];
-    bool sptSet[graph.vertices];
+vector<int> bellmanFord(const Graph& graph, int src, int dest, bool &success)
+{
+    //Step 1 initalize everything
+    double dist[graph.vertices];
     vector<int> prev(graph.vertices);
 
-    for (int i = 0; i < graph.vertices; i++) {
+    for (int i = 0; i < graph.vertices; i++)
+    {
         dist[i] = INT_MAX;
-        prev[0] = -1;
-        sptSet[i] = false;
+        prev[i] = -1;
     }
+
     //Step 2 Relax Edges
     dist[src] = 0;
-    for (int i = 0; i < graph.adj_list.size(); i++) {
-        for (int j = 0; j < graph.adj_list[i].size(); j++) {
-            auto u = i;
-            auto v = graph.adj_list[i][j].first; //to vertex
-            double w = graph.adj_list[i][j].second; //weight of edge
-            if (dist[u] + w < dist[v]) {
+    for (int i = 1; i < graph.vertices; i++)
+    {
+        for (int j = 0; j < graph.numEdges; j++)
+        {
+            auto u = graph.edges[j].src; //start vertex
+            auto v = graph.edges[j].dest; //to vertex
+            double w = graph.edges[j].weight; //weight of edge
+            if (dist[u] != INT_MAX && dist[u] + w < dist[v])
+            {
                 dist[v] = dist[u] + w;
                 prev[v] = u;
             }
         }
     }
+
     //Step 3, negative cycles
-    for (int i = 0; i < graph.adj_list.size(); i++)
-    {
-        for (int j = 0; j < graph.adj_list[i].size(); j++)
+    for (int j = 0; j < graph.numEdges; j++) {
+        auto u = graph.edges[j].src; //start vertex
+        auto v = graph.edges[j].dest; //to vertex
+        double w = graph.edges[j].weight; //weight of edge
+        if (dist[u] != INT_MAX && dist[u] + w < dist[v])
         {
-            int u = i;
-            int v = graph.adj_list[i][j].first;
-            double w = graph.adj_list[i][j].second;
-            if (dist[u] + w < dist[v]) {
-                cout << "Graph contains a negative";
-                success = false;
-                return prev;
-            }
+            cout << "Graph contains a negative cycle." << endl;
+            success = false;
+            return prev;
         }
     }
 
@@ -292,13 +311,16 @@ vector<int> BFS(Graph &graph, int start, int end, int vertices, int prev[], int 
         {
             if (!visited[graph.adj_list[top][i].first])
             {
+                prev[graph.adj_list[top][i].first] = top;
                 visited[graph.adj_list[top][i].first] = true;
                 dist[graph.adj_list[top][i].first] = dist[top] + 1;
-                prev[graph.adj_list[top][i].first] = top;
                 order.push_back(graph.adj_list[top][i].first);
 
                 if (graph.adj_list[top][i].first == end)
+                {
                     success = true;
+                    break;
+                }
             }
         }
     }
@@ -322,6 +344,7 @@ int main()
     readAthleteCSV("olympicdata.csv", athletes);
 
     // read in edges
+    cout << "Building full graph of Olympic connections..." << endl << endl;
     vector<pair<int, int>> pairs;
     readPairsCSV("pairs.csv", pairs);
     auto olympicGraph = Graph(athletes.size());
@@ -329,9 +352,7 @@ int main()
 
     // build the graph
     for(int i = 0; i < pairs.size(); i++)
-    {
         olympicGraph.addEdge(pairs[i].first, pairs[i].second, athletes[pairs[i].first].medalCount + athletes[pairs[i].second].medalCount);
-    }
 
     cout
             << "     _______________" << endl
@@ -345,11 +366,12 @@ int main()
             << "        .-'''''-." << endl
             << "      .'  * * *  `." << endl
             << "     :  *       *  :" << endl
-            << "    : ~  O A C C  ~ :" << endl
+            << "    : ~  5 R O S  ~ :" << endl
             << "    : ~ A W A R D ~ :" << endl
             << "     :  *       *  :" << endl
             << "      `.  * * *  .'" << endl
-            << "        `-.....-'" << endl;
+            << "        `-.....-'" << endl
+            << "   art by joan g stark" << endl;
 
     cout << "Welcome to the Five Rings of Separation!" << endl;
     cout << "----------------------------------------" << endl;
@@ -379,14 +401,14 @@ int main()
         int pred[olympicGraph.vertices], dist[olympicGraph.vertices];
         vector<int> path = BFS(olympicGraph, stoi(athlete1), stoi(athlete2), olympicGraph.vertices, pred, dist, success);
         auto stop3 = high_resolution_clock::now();
+
         if(!success) // only prints a path if there is a full one between two athletes from BFS
-        {
             cout << "It looks like there is no path that fully connects " <<  athletes[stoi(athlete2)].name << " and " << athletes[stoi(athlete1)].name << "." << endl << endl;
-        }
+
         else
         {
             cout << "A path was found between your athletes!" << endl;
-            cout << "Breadth-First Search found the following path with the most medals between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << "Breadth-First Search found the following shortest path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             for(int i = path.size() - 1; i >= 0; i--)
             {
                 printBasicInfo(path[i], athletes);
@@ -395,14 +417,22 @@ int main()
 
             auto duration3 = duration_cast<microseconds>(stop3 - start3);
 
+            cout << endl
+                 << "  .__." << endl
+                 << " (|  |)" << endl
+                 << "  (  )" << endl
+                 << "  _)(_  " << endl
+                 << "art by sjw" << endl;
+
+            cout << "Now looking for the path with the most medals!" << endl;
             // DIJKSTRA'S ALGORITHM
-            cout << endl << "Dijkstra's Algorithm found the following path with the most medals between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << endl << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             vector<int> dist(olympicGraph.vertices), prev(olympicGraph.vertices);
             int begin = stoi(athlete1);
             int end = stoi(athlete2);
-            bool success = false;
+            success = false;
             auto start1 = high_resolution_clock::now();
-            vector<int> path = dijkstra(olympicGraph, dist, prev, begin, end, success);
+            path = dijkstra(olympicGraph, dist, prev, begin, end, success);
             auto stop1 = high_resolution_clock::now();
             for(int i = 0; i < path.size(); i++)
             {
@@ -413,7 +443,7 @@ int main()
 
             // BELLMAN-FORD ALGORITHM
             cout << endl << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
-/*            auto start2 = high_resolution_clock::now();
+            auto start2 = high_resolution_clock::now();
             success = false;
             path = bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2), success);
             for(int i = 0; i < path.size(); i++)
@@ -422,14 +452,14 @@ int main()
                 cout << endl;
             }
             auto stop2 = high_resolution_clock::now();
-            auto duration2 = duration_cast<microseconds>(stop2 - start2);*/
+            auto duration2 = duration_cast<microseconds>(stop2 - start2);
 
             // comparing the performance of the algorithms
             cout << endl << endl << "PERFORMANCE DIAGNOSTICS" << endl;
             cout << "-----------------------" << endl;
             cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
             cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
-            //cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
+            cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
             cout << "-----------------------" << endl;
         }
 

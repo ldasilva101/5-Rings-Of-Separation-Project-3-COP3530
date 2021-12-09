@@ -1,6 +1,7 @@
+library(stringr)
+
 olympics <- read.csv("athlete_events.csv")
 
-olympics$Team <- paste(olympics$Team, olympics$Year, sep = " ")
 olympics$Sport <- paste(olympics$Sport, olympics$Year, sep = " ")
 olympics$Medal <- paste("(", olympics$Medal, ")")
 olympics$Event <- paste(olympics$Event, olympics$Medal, sep = " ")
@@ -40,6 +41,9 @@ tokeep <- sample(nrow(olympics), 100000, replace = FALSE)
 
 olympics <- olympics[tokeep, ]
 row.names(olympics) <- NULL
+
+olympics$Team <- substr(olympics$Team,1,nchar(olympics$Team)-5)
+
 write.csv(olympics, "olympicdata.csv")
 
 pairs <- read.csv("pairs.csv")
@@ -47,7 +51,6 @@ pairs <- read.csv("pairs.csv")
 pairs$Line_x <- as.integer(pairs$Line_x)
 pairs$Line_y <- as.integer(pairs$Line_y)
 str(pairs)
-length(which(pairs$Line_x == 9))
 
 head(pairs)
 pairs <- pairs[-1,]       
