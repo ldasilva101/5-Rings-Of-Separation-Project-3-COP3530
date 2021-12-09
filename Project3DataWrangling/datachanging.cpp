@@ -355,18 +355,25 @@ void dijkstra(const Graph& graph, int src, int dest)
     printSolution(dist, graph.vertices, parent, dest);
 }
 
-// not totally correct :)
-void bfs(const Graph& graph, int src, int end) {
-    set<int> visited;
-    queue<int> search;
+// works pretty well! probably needs some modifications though
+bool bfs(const Graph& graph, pair<int, double> src, pair<int, double> end) {
+    bool successful = false;
+
+    set<pair<int,double>> visited;
+    queue<pair<int,int>> search;
 
     visited.insert(src);
     search.push(src);
 
     while(!search.empty())
     {
-        int element = search.front();
-        cout << element << " ";
+        int element = search.front().first;
+        cout << element << endl;
+        if(element == end.first)
+        {
+            successful = true;
+            break;
+        }
         search.pop();
 
         vector<pair<int, double>> connections = graph.adj_list[element];
@@ -381,6 +388,8 @@ void bfs(const Graph& graph, int src, int end) {
             }
         }
     }
+
+    return successful;
 }
 
 
@@ -421,28 +430,32 @@ int main()
 
         cout << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
         // dijkstra's
-        int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
-        int begin = stoi(athlete1);
-        int end = stoi(athlete2);
+        //int dist[olympicGraph.vertices], prev[olympicGraph.vertices];
+       // int begin = stoi(athlete1);
+       // int end = stoi(athlete2);
         auto start = high_resolution_clock::now();
        // dijkstra(olympicGraph, begin, end);
         auto stop = high_resolution_clock::now();
         auto duration1 = duration_cast<seconds>(stop - start);
 
-        cout << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+     //   cout << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
         // bellman ford
-        start;
-        stop;
+     //   start;
+     //   stop;
         auto duration2 = duration_cast<seconds>(stop - start);
 
         cout << "Breadth-First Search found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
         // bfs or something
         start;
-        bfs(olympicGraph, begin, end);
+        pair<int, double> bfsSrc = make_pair(stoi(athlete1), athletes[stoi(athlete1)].weight);
+        pair<int, double> bfsEnd = make_pair(stoi(athlete2), athletes[stoi(athlete2)].weight);
+        bool success = bfs(olympicGraph, bfsSrc, bfsEnd);
+        if(!success)
+            cout << "It looks like there are no connections that reach " <<  athletes[stoi(athlete2)].name << " from " << athletes[stoi(athlete1)].name << "." << endl;
         stop;
-        auto duration3 = duration_cast<seconds>(stop - start);
+        auto duration3 = duration_cast<seconds>(stop - start); // seconds might be too much idk
 
-        cout << "The diagnostics for the performance of these algorithms was: " << endl;
+        cout << endl << "The diagnostics for the performance of these algorithms was: " << endl;
         cout << "Dijkstra's Algorithm: " << duration1.count() << " seconds" << endl;
         cout << "Bellman-Ford Algorithm: " << duration2.count() << " seconds" << endl;
         cout << "Breadth-First Search: " << duration3.count() << " seconds" << endl;
