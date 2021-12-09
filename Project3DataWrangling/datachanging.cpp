@@ -424,7 +424,7 @@ int main()
                  << "  _)(_  " << endl
                  << "art by sjw" << endl;
 
-            cout << "Now looking for the path with the most medals!" << endl;
+            cout << endl << "Now looking for the path with the most medals!" << endl;
             // DIJKSTRA'S ALGORITHM
             cout << endl << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
             vector<int> dist(olympicGraph.vertices), prev(olympicGraph.vertices);
