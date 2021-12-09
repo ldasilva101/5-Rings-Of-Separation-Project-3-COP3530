@@ -445,6 +445,7 @@ int main()
     vector<pair<int, int>> pairs;
     readPairsCSV("pairs.csv", pairs);
     auto olympicGraph = Graph(athletes.size());
+    olympicGraph.vertices = athletes.size();
 
     // build the graph
     for(int i = 0; i < pairs.size(); i++)
