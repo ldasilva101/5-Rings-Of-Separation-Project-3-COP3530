@@ -413,7 +413,7 @@ int main()
 
             // BELLMAN-FORD ALGORITHM
             cout << endl << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
-            auto start2 = high_resolution_clock::now();
+/*            auto start2 = high_resolution_clock::now();
             success = false;
             path = bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2), success);
             for(int i = 0; i < path.size(); i++)
@@ -422,14 +422,14 @@ int main()
                 cout << endl;
             }
             auto stop2 = high_resolution_clock::now();
-            auto duration2 = duration_cast<microseconds>(stop2 - start2);
+            auto duration2 = duration_cast<microseconds>(stop2 - start2);*/
 
             // comparing the performance of the algorithms
             cout << endl << endl << "PERFORMANCE DIAGNOSTICS" << endl;
             cout << "-----------------------" << endl;
             cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
             cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;
-            cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
+            //cout << "Bellman-Ford Algorithm: " << duration2.count() << " microseconds" << endl;
             cout << "-----------------------" << endl;
         }
 
