@@ -416,13 +416,13 @@ int main()
         {
             cout << "A path was found between your athletes!" << endl;
             cout << "Breadth-First Search found the following shortest path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
             for(int i = path.size() - 1; i >= 0; i--)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
 
             auto duration3 = duration_cast<microseconds>(stop3 - start3);
 
@@ -436,6 +436,7 @@ int main()
             cout << endl << "Now looking for the path with the most medals!" << endl;
             // DIJKSTRA'S ALGORITHM
             cout << endl << "Dijkstra's Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
             vector<int> dist(olympicGraph.vertices), prev(olympicGraph.vertices);
             int begin = stoi(athlete1);
             int end = stoi(athlete2);
@@ -443,32 +444,31 @@ int main()
             auto start1 = high_resolution_clock::now();
             path = dijkstra(olympicGraph, dist, prev, begin, end, success);
             auto stop1 = high_resolution_clock::now();
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             for(int i = 0; i < path.size(); i++)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             auto duration1 = duration_cast<microseconds>(stop1 - start1);
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
 
             // BELLMAN-FORD ALGORITHM
             cout << endl << "The Bellman-Ford Algorithm found the following path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
             auto start2 = high_resolution_clock::now();
             success = false;
             path = bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2), success);
             auto stop2 = high_resolution_clock::now();
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             for(int i = 0; i < path.size(); i++)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
-            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             auto duration2 = duration_cast<microseconds>(stop2 - start2);
+            cout << ":::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\" << endl;
 
             // comparing the performance of the algorithms
-            cout << endl << endl << "PERFORMANCE DIAGNOSTICS" << endl;
+            cout << endl << "PERFORMANCE DIAGNOSTICS" << endl;
             cout << "-----------------------" << endl;
             cout << "Breadth-First Search: " << duration3.count() << " microseconds" << endl;
             cout << "Dijkstra's Algorithm: " << duration1.count() << " microseconds" << endl;

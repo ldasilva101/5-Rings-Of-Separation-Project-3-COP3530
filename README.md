@@ -1,5 +1,19 @@
 # Project 3 - Group 33
 
+Directions for running the program:
+
+Directions for use:
+(1) download project from GitHub
+(2) download pairs.csv from Google Drive
+(3) move pairs.csv into the cmake-build-debug folder BEFORE running program
+(4) program runs in C++ CLion IDE
+
+Link to pairs.csv:
+
+https://drive.google.com/file/d/1_c53WbStf9siPnwxKyc44-NbjYpaYGxo/view?usp=sharing
+
+Project Proposal:
+
 Administrative
 
 Team Name: The Gold Medalists

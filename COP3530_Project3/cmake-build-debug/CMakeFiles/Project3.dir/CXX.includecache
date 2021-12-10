@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.h
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/COP3530_Project3/athlete.cpp
+athlete.h
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/COP3530_Project3/athlete.h
+
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/COP3530_Project3/athlete.h
 string
 -
 utility
@@ -16,7 +20,7 @@ iostream
 vector
 -
 
-/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/main.cpp
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/COP3530_Project3/main.cpp
 iostream
 -
 string
@@ -34,5 +38,5 @@ set
 queue
 -
 athlete.h
-/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.h
+/Users/hadleybrowder/Documents/GitHub/Project3COP3530/COP3530_Project3/athlete.h
 
