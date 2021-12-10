@@ -37,8 +37,6 @@ olympics <- olympics[,-1]
 
 set.seed(88)
 tokeep <- sample(nrow(olympics), 100000, replace = FALSE)
-
-
 olympics <- olympics[tokeep, ]
 row.names(olympics) <- NULL
 

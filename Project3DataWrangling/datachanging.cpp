@@ -149,6 +149,7 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
         string fileLine;
         getline(inFile, fileLine);
 
+        int i = 0;
         while (getline(inFile, fileLine))
         {
             istringstream stream(fileLine);
@@ -163,12 +164,18 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
             getline(stream, athleteAstr, ',');
             getline(stream, athleteBstr, ',');
 
-            if(athleteAstr != "NA")
+            if(i == 10000)
+                break;
+            else
             {
-                int athleteA = stoi(athleteAstr);
-                int athleteB = stoi(athleteBstr);
+                if(athleteAstr != "NA")
+                {
+                    i++;
+                    int athleteA = stoi(athleteAstr);
+                    int athleteB = stoi(athleteBstr);
 
-                pairs.push_back(make_pair(athleteA, athleteB));
+                    pairs.push_back(make_pair(athleteA, athleteB));
+                }
             }
         }
     }
@@ -373,7 +380,7 @@ int main()
             << "        `-.....-'" << endl
             << "   art by joan g stark" << endl;
 
-    cout << "Welcome to the Five Rings of Separation!" << endl;
+    cout << endl << "Welcome to the Five Rings of Separation!" << endl;
     cout << "----------------------------------------" << endl;
     string keepgoing = "yes";
     while(keepgoing == "yes")
@@ -403,17 +410,19 @@ int main()
         auto stop3 = high_resolution_clock::now();
 
         if(!success) // only prints a path if there is a full one between two athletes from BFS
-            cout << "It looks like there is no path that fully connects " <<  athletes[stoi(athlete2)].name << " and " << athletes[stoi(athlete1)].name << "." << endl << endl;
+            cout << "It looks like there is no path that fully connects " <<  athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << "." << endl << endl;
 
         else
         {
             cout << "A path was found between your athletes!" << endl;
             cout << "Breadth-First Search found the following shortest path between " << athletes[stoi(athlete1)].name << " and " << athletes[stoi(athlete2)].name << ":" << endl;
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             for(int i = path.size() - 1; i >= 0; i--)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
 
             auto duration3 = duration_cast<microseconds>(stop3 - start3);
 
@@ -434,11 +443,13 @@ int main()
             auto start1 = high_resolution_clock::now();
             path = dijkstra(olympicGraph, dist, prev, begin, end, success);
             auto stop1 = high_resolution_clock::now();
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             for(int i = 0; i < path.size(); i++)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             auto duration1 = duration_cast<microseconds>(stop1 - start1);
 
             // BELLMAN-FORD ALGORITHM
@@ -446,12 +457,14 @@ int main()
             auto start2 = high_resolution_clock::now();
             success = false;
             path = bellmanFord(olympicGraph, stoi(athlete1), stoi(athlete2), success);
+            auto stop2 = high_resolution_clock::now();
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             for(int i = 0; i < path.size(); i++)
             {
                 printBasicInfo(path[i], athletes);
                 cout << endl;
             }
-            auto stop2 = high_resolution_clock::now();
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             auto duration2 = duration_cast<microseconds>(stop2 - start2);
 
             // comparing the performance of the algorithms
@@ -476,7 +489,9 @@ int main()
             cin >> index;
             int i = stoi(index);
             cout << endl;
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             printFullInfo(i, athletes);
+            cout << "~*~*~*~*~*~*~*~*~*~*~" << endl;
             cout << endl << "Would you like more information about another athlete? (yes/no): ";
             cin >> moreInfo;
         }
