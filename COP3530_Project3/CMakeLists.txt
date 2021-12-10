@@ -3,4 +3,4 @@ project(Project3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Project3 datachanging.cpp athlete.cpp athlete.h)
+add_executable(Project3 main.cpp athlete.cpp athlete.h)

@@ -86,7 +86,7 @@
 		<Unit filename="/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/athlete.h">
 			<Option target="Project3"/>
 		</Unit>
-		<Unit filename="/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp">
+		<Unit filename="/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/main.cpp">
 			<Option target="Project3"/>
 		</Unit>
 		<Unit filename="/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/CMakeLists.txt">

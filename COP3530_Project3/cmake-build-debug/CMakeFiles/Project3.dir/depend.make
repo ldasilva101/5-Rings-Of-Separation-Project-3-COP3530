@@ -4,6 +4,6 @@
 CMakeFiles/Project3.dir/athlete.cpp.o: \
  ../athlete.cpp \
  ../athlete.h
-CMakeFiles/Project3.dir/datachanging.cpp.o: \
+CMakeFiles/Project3.dir/main.cpp.o: \
  ../athlete.h \
- ../datachanging.cpp
+ ../main.cpp

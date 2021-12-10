@@ -66,18 +66,18 @@ include CMakeFiles/Project3.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Project3.dir/flags.make
 
-CMakeFiles/Project3.dir/datachanging.cpp.o: CMakeFiles/Project3.dir/flags.make
-CMakeFiles/Project3.dir/datachanging.cpp.o: ../datachanging.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Project3.dir/datachanging.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Project3.dir/datachanging.cpp.o -c /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp
+CMakeFiles/Project3.dir/main.cpp.o: CMakeFiles/Project3.dir/flags.make
+CMakeFiles/Project3.dir/main.cpp.o: ../main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Project3.dir/main.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Project3.dir/main.cpp.o -c /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/main.cpp
 
-CMakeFiles/Project3.dir/datachanging.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Project3.dir/datachanging.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp > CMakeFiles/Project3.dir/datachanging.cpp.i
+CMakeFiles/Project3.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Project3.dir/main.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/main.cpp > CMakeFiles/Project3.dir/main.cpp.i
 
-CMakeFiles/Project3.dir/datachanging.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Project3.dir/datachanging.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/datachanging.cpp -o CMakeFiles/Project3.dir/datachanging.cpp.s
+CMakeFiles/Project3.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Project3.dir/main.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hadleybrowder/Documents/GitHub/Project3COP3530/Project3DataWrangling/main.cpp -o CMakeFiles/Project3.dir/main.cpp.s
 
 CMakeFiles/Project3.dir/athlete.cpp.o: CMakeFiles/Project3.dir/flags.make
 CMakeFiles/Project3.dir/athlete.cpp.o: ../athlete.cpp
@@ -94,13 +94,13 @@ CMakeFiles/Project3.dir/athlete.cpp.s: cmake_force
 
 # Object files for target Project3
 Project3_OBJECTS = \
-"CMakeFiles/Project3.dir/datachanging.cpp.o" \
+"CMakeFiles/Project3.dir/main.cpp.o" \
 "CMakeFiles/Project3.dir/athlete.cpp.o"
 
 # External object files for target Project3
 Project3_EXTERNAL_OBJECTS =
 
-Project3: CMakeFiles/Project3.dir/datachanging.cpp.o
+Project3: CMakeFiles/Project3.dir/main.cpp.o
 Project3: CMakeFiles/Project3.dir/athlete.cpp.o
 Project3: CMakeFiles/Project3.dir/build.make
 Project3: CMakeFiles/Project3.dir/link.txt

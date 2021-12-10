@@ -153,29 +153,29 @@ athlete.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/athlete.cpp.s
 .PHONY : athlete.cpp.s
 
-datachanging.o: datachanging.cpp.o
-.PHONY : datachanging.o
+main.o: main.cpp.o
+.PHONY : main.o
 
 # target to build an object file
-datachanging.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/datachanging.cpp.o
-.PHONY : datachanging.cpp.o
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-datachanging.i: datachanging.cpp.i
-.PHONY : datachanging.i
+main.i: main.cpp.i
+.PHONY : main.i
 
 # target to preprocess a source file
-datachanging.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/datachanging.cpp.i
-.PHONY : datachanging.cpp.i
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-datachanging.s: datachanging.cpp.s
-.PHONY : datachanging.s
+main.s: main.cpp.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-datachanging.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/datachanging.cpp.s
-.PHONY : datachanging.cpp.s
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Project3.dir/build.make CMakeFiles/Project3.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... athlete.o"
 	@echo "... athlete.i"
 	@echo "... athlete.s"
-	@echo "... datachanging.o"
-	@echo "... datachanging.i"
-	@echo "... datachanging.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 
