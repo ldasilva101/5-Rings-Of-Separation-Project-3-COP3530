@@ -1,23 +1,40 @@
-# Project3COP3530
+# Project 3 - Group 33
 
 Administrative
 
 Team Name: The Gold Medalists
+
 Team Members: Hadley Browder, Nicole Campbell, Lucas Da Silva
+
 Project Title: Five Rings of Separation 
+
 GitHub URL: *tbd*
-Video Link:
+Video Link: *tbd*
 
 Extended and Refined Proposal
 
-Analysis
+Problem: The Olympics is the world’s biggest international pastime. Every 4 years, the quickest, strongest, and freakiest athletes go to a host nation to compete in a plethora of events.  These athletes come from all over the world to compete in various sports.  This may lead spectators to wonder: how connected are the different athletes?  Our program looks to explore how closely related athletes are who competed in the same Olympic year, in various sports, and are from different countries.  Additionally, as an added bonus, users can track the path of most medals between their chosen athletes.    
 
-Reflection
+Motivation: As one of the most watched sporting events in the world, many people have their favorite athletes to watch.  Favorites can be fellow countrymen all the way to players from a professional team.  But, how related are their favorite athletes?  This program allows users to see the path from athlete to athlete, with the added excitement of the journey through the most medals! 
 
-References
+Features: The factors we will be considering are the Olympic year and nationality of the athlete as well as the year and sport that the athlete competed in.  This allows our program to connect athletes that competed in the same year to each other based on those two metrics merged together.  The weight between two athletes will be calculated by the number of medals won, not distinguishing between gold, silver and bronze. The total number of medals between athletes will be put over 1 for functionality of shortest-  This feature creates a more fun and interesting look at the path between athletes.  The user will select two athletes that have competed in the Olympics, regardless of sport, nationality or year. The output of the program will allow users to see if these athletes competed in the same games and how they’re connected, as well as the events an athlete competed in for that given year and sport and any medals won. Another feature of the program will allow users to get a whole overview of an athlete in their given Olympic games.
+
+Data: We’ll be using the data set “120 years of Olympic history: athletes and results” by rgriffin on Kaggle. The data set is linked here: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results
+
+This data set includes variables such as Sex, Age, Height, Weight, Medal, and Sport.  We will be focusing on the athlete’s name, medals won (if any), Olympic year, sport, event, and nationality.  The vertices of the graph are the athletes and the edges will be based on athletes competing on the same Olympic team or in the same sport for that given year.  The graph’s weights will be determined by medal count and, pending a tie in medal count, order of athlete indices.
+
+Tools: Data cleaning and preparation will be done in R and Python. The programming language that will back up our program is C++. As none of our group members have sufficient experience in creating a GUI, the program will be run through an IDE console.
+
+Visuals: We envision a simplistic program to accomplish our goals. The program will ask for the indices of two athletes that a user wants to connect. Then, the program will indicate if a path has been found. If it has not, it will alert the user to this. If it has, it will proceed to output the paths found by BFS, Dijkstra’s, and Bellman-Ford. The paths will include the athlete index, team, and sport for each athlete. After printing the paths, the program will print information regarding how long each method took to run for comparison purposes. The user will then have the option to get more information about a specific athlete by entering the index of the athlete. The user can continue to input athletes until they’d like to stop.
+
+
+Strategy: We will use the Dijkstra’s Shortest Path algorithm and the Bellman Ford algorithm to calculate the distance and return a path between athletes.  This will be tricky, as we want the highest weighted path to get the highest medal count along the path between athletes.  To counter this issue, we standardized the medal counts by taking the inverse of two connected athletes’ medal counts.  If the athletes did not get a medal in anything, the edge weight will be 2, that being a number higher than any weight that did contain medals.  Another algorithm we used was the breadth first search to compare with Dijkstra’s Shortest Path and Bellman Ford.  Additionally, the graph will be implemented using an adjacency list.  By applying these three algorithms, we will be able to compare the search speed between weighted and unweighted graphs, along with a comparison of algorithm speeds.  
+
+Distribution of Roles: Hadley found the data and was in charge of cleaning up and formatting it for usage in our program, as well as inputting the data into the program and storing athlete data. She created the file that was used to create the graph edges. She also wrote the general structure for the main function, including timing and some of the print functions, and created the outline of the final report. Lucas came up with the initial idea and overall structure for the program, created the foundations of the data structure, and devised the athlete class that was to be used.  Lucas implemented Dijkstra’s algorithm and the rest of the print functions. He also wrote code to add artistic effects to the main function. Hadley implemented the breadth-first search algorithm. Nicole and Lucas implemented the Bellman-Ford algorithm. Nicole also wrote the final report, with help from Hadley.   
 
 
 OLYMPIAN MATCH (Index, Name)
+
 | Index | Name|
 | --- | --- |
 |	0	|	Marco Aurlio Paradeda		|
