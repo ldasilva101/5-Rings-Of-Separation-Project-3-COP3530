@@ -149,7 +149,6 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
         string fileLine;
         getline(inFile, fileLine);
 
-        int i = 0;
         while (getline(inFile, fileLine))
         {
             istringstream stream(fileLine);
@@ -164,18 +163,12 @@ void readPairsCSV(string filename, vector<pair<int, int>> &pairs)
             getline(stream, athleteAstr, ',');
             getline(stream, athleteBstr, ',');
 
-            if(i == 10000)
-                break;
-            else
+            if(athleteAstr != "NA")
             {
-                if(athleteAstr != "NA")
-                {
-                    i++;
-                    int athleteA = stoi(athleteAstr);
-                    int athleteB = stoi(athleteBstr);
+                int athleteA = stoi(athleteAstr);
+                int athleteB = stoi(athleteBstr);
 
-                    pairs.push_back(make_pair(athleteA, athleteB));
-                }
+                pairs.push_back(make_pair(athleteA, athleteB));
             }
         }
     }
