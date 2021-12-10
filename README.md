@@ -3,7 +3,7 @@
 Directions for running the program:
 
 Directions for use:
-(1) download project from GitHub
+(1) download COP3530_Project3 project from GitHub
 (2) download pairs.csv from Google Drive
 (3) move pairs.csv into the cmake-build-debug folder BEFORE running program
 (4) program runs in C++ CLion IDE
